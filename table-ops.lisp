@@ -496,29 +496,12 @@
 
 (tail *plot-stacked* 20)
 
-;;;; =================================== end of executed code
-(uiop:quit)
-;; ====================================== build
-
 ;; ====================================== distributions outliers and clean
                                         ; set browser for viewing plots
 (setf plot:*browser-commands* '((:CHROME) (:FIREFOX . "firefox") (:DEFAULT . "nyxt")))
 
-                                        ; source dimensions
 
-;; HEIGHT-CM
-(plot:plot
- (vega:defplot height-cm
-   `(:mark :bar
-	   :data (:values ,(filter-rows *plot-stacked* '(and (> 100 height-cm)
-                                                   (< 15 height-cm))))
-	   :encoding (:x (:bin (:step 1)
-	                  :field :height-cm)
-		            :y (:aggregate :count)))))
-;; observe a few infrequent high outliers, due to photography and plant proximity
-;; overall normal with a preponderance of high values
-
-;; ROW-TYPE
+                                        ; find unique elements
 (length *plot-stacked*:row-type)
 (remove-duplicates *plot-stacked*:row-type)
 
@@ -538,13 +521,28 @@
                    (aref counts i) (cdr entry)))
     (values unique-items counts)))
 
-(unique-with-counts *plot-stacked*:row-type)
+                                        ; source dimensions
+;; HEIGHT-CM
+(plot:plot
+ (vega:defplot height-cm
+     `(:mark :bar
+	     :data (:values ,(filter-rows *plot-stacked* '(and (> 100 height-cm)
+                                                     (< 15 height-cm))))
+	     :encoding (:x (:bin (:step 1)
+	                    :field :height-cm)
+		              :y (:aggregate :count)))))
+;; observe a few infrequent high outliers, due to photography and plant proximity
+;; overall normal with a preponderance of high values
 
+;; ROW-TYPE
+(unique-with-counts *plot-stacked*:row-type)
 ;; => #(:NA -1 2 6 "W" "D"), #(5 3 897 58 37 10)
+;; preponderance 2 row, small fraction 6 row
 
 ;; HULLESS-CONDITION
 (unique-with-counts *plot-stacked*:hulless-condition :test 'equal)
 ;; => #(:NA -1 "H" "C" "W" "D"), #(5 3 91 864 37 10)
+;; preponderance covered, small fraction hulless
 
 ;; SBLOTCH-RATING
 (unique-with-counts *plot-stacked*:sblotch-rating :test 'equal)

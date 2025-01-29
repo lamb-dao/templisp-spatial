@@ -1,9 +1,22 @@
 * Data Preparation for TEMP-LISP
 
 ** dynamic-world-norm.py
-Implementation of the dynamic world raster normalization method &&&cite
+- Implementation of the dynamic world raster normalization method
+- Brown, C.F., Brumby, S.P., Guzder-Williams, B. et al. Dynamic World, Near real-time global 10 m land use land cover mapping. Sci Data 9, 251 (2022). https://doi.org/10.1038/s41597-022-01307-4
+- normalize single band geotiff
 
-&&&impressive description
+- transformation
+  - log transform to attenuate long right tailed distribution
+  - Calculate 1st and 99th percentiles of log-transformed data
+  - remap to sigmoid curve
+  - apply sigmoid
+
+- properties
+  - smooth, nonlinear, uniform normalization
+  - retains underlying relative shape of the distribution
+  - output raster is constrained  in range [0, 1], 32 bit floating point
+  - input raster metadata is transferred to normalized raster
+
 - this is a standalone program which can be applied to a single raster
 - optionally produce raster and histogram of each data transformation
 
