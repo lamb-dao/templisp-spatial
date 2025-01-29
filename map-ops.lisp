@@ -6,7 +6,6 @@
   (:use
    :cl
    :click
-   :py4cl2
    :cmd
    :file-finder))
 
@@ -260,27 +259,22 @@
 
 ;; ====================================== normalize
 
-(ql:quickload :py4cl2)
-(use-package :py4cl2)
-;; (py4cl2:initialize) ; python3 ret ret ret
-;; (pyversion-info)
+;; Trying a dedicated conda environment to make the call from here possible &&&
 
-(defpymodule "os" nil :lisp-package "PYOS")
-(py-cd "/home/user/")
-(pyos:getcwd)
-
-(defpymodule "numpy" nil :lisp-package "NP")
-(np:floor 4.20)
 
 ;;#|;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv end of compiled code
 (error "Beyond here be monsters") ;; ensure #| is active to exclude construction from compilation
 
 ;; ====================================== build
 
-(defpymodule "rasterio" nil :lisp-package "RIO")
+(defun dynamic-world-norm ()
+  "normalize a single layer geotiff"
+  ($cmd "python3 /home/user/db/1/masters/code/templisp-spatial/dynamic-world-norm.py -p filein fileout"))
+
+(dynamic-world-norm)
+
 
 ;; ====================================== scratch
-np.floor(4.2)
 ;; ====================================== reference
 
 ;;;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv later

@@ -1,0 +1,25 @@
+* Data Preparation for TEMP-LISP
+
+** dynamic-world-norm.py
+Implementation of the dynamic world raster normalization method &&&cite
+
+&&&impressive description
+- this is a standalone program which can be applied to a single raster
+- optionally produce raster and histogram of each data transformation
+
+** map-ops.lisp
+Execute all stages of spatial data preparation for the initial 70 geotiffs
+
+- merge split flights
+- clip rasters with calculation buffer
+- repair nodata pixels
+- normalize with standalone python implementation
+- create scale invariant gaussian pyramid
+- clip without calculation buffer using concensus masks
+- Create composite images from normed rasters for segmentation
+- export to geopackage standardized format
+
+** table-ops.lisp
+
+
+** &&& segmentation notebook

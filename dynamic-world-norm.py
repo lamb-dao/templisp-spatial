@@ -1,22 +1,28 @@
 #!/usr/bin/env python3
 
+# import sys
+# sys.path.append('/home/user/.guix-profile/lib/python3.10/site-packages')
+
 import os
 import warnings
 import numpy as np
-import rasterio
+import rasterio # &&&
 import argparse
-import matplotlib.pyplot as plt
-plt.ioff() # ensure interactive matplotlib is deactivated
+# import matplotlib.pyplot as plt # &&&
+# plt.ioff() # ensure interactive matplotlib is deactivated
 
 
 # CALL:
-# python3 dynamic-world-norm.py /bulk-1/rasters/2023-07-04_index_blue_test-buffer_filled_aligned.tif /bulk-1/rasters/2023-07-04_index_blue_test-buffer_filled_aligned_normalized.tif -p
+# python3 dynamic-world-norm.py [-p|--plot] /.../src.tif /.../dst.tif
+# python3 dynamic-world-norm.py -p /bulk-1/rasters/2023-07-04_index_blue_test-buffer_filled_aligned.tif /bulk-1/rasters/2023-07-04_index_blue_test-buffer_filled_aligned_normalized.tif
 
 # normalize single band geotiff with dynamic world method
     # 1. Log transform to handle long-tailed values
     # 2. Calculate 1st and 99th percentiles of log-transformed data
     # 3. Remap these percentiles to sigmoid curve
     # results in reshaped DN, with extremes squished but not clipped, bounded on (0, 1)
+
+#conda with numpy, rasterio,
 
 def plot_transformations(data_dict, output_path):
     """
@@ -173,19 +179,9 @@ def normalize_raster(input_path, output_path, plot):
 
         # Prepare the output profile (metadata)
         profile = src.profile.copy()
-# {'driver': 'GTiff',
-# 'dtype': 'float32',
-# 'nodata': -10000.0,
-# 'width': 2819, 'height': 2417, 'count': 1,
-# 'crs': CRS.from_epsg(32614), 'transform': Affine(0.003, 0.0, 429516.072, 0.0, -0.003, 5524120.8780000005),
-# 'blockysize': 1, 'tiled': False, 'interleave': 'band'}
-
         dtype_norm = normalized.dtype
-        #print(dtype_norm)
-
         if dtype_norm != np.float32:
             warnings.warn(f"The normalized data type is {dtype_norm} Expected to find float32, ensure this is correct for down stream processing")
-
         profile.update(dtype=dtype_norm)
 
         # Write the normalized data
@@ -199,8 +195,6 @@ def normalize_raster(input_path, output_path, plot):
 
 def main():
     """Main function to handle command-line arguments and execute file operations."""
-    print("early exit to test call from common lisp&&&")
-    exit(0)
     parser = argparse.ArgumentParser(
         description="File operations utility script",
         formatter_class=argparse.RawDescriptionHelpFormatter
@@ -220,10 +214,10 @@ def main():
     )
     args = parser.parse_args()
 
+    print(f"&&& early exit test call: {args.plot} {args.src_file} {args.dst_file}")
+    exit(0)
     normalize_raster(args.src_file, args.dst_file, args.plot)
     plt.close('all') #ensure matplotlib ends
 
 if __name__ == "__main__":
     main()
-
-# TODO push to github
