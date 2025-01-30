@@ -265,14 +265,139 @@
 ;;#|;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv end of compiled code
 (error "Beyond here be monsters") ;; ensure #| is active to exclude construction from compilation
 
+;; ======================================build
+
+
+
+;; ====================================== py4cl
+(ql:quickload :py4cl)
+(use-package :py4cl)
+
+(defun mypystart ()
+  "Starts py4cl and runs a basic test"
+
+                                        ; may need to manually initialize
+  ;; (py4cl:initialize)
+  ;; ;; python3, ret, ret
+  ;; (print py4cl:*config*)
+                                        ; test setup finds python on path
+  (print py4cl:*python-command*)
+  (setf py4cl:*python-command* "python3")
+  (py4cl:python-version-info) ; fails if python command is not resolved in system
+
+                                        ; test usage
+  (py4cl:import-module "math")
+  (py4cl:python-eval "math.pi") ; 3.1415...
+  (py4cl:python-exec "print(\"hello\")") ; => hello
+  (py4cl:import-module "numpy" :as "np")
+  (np:floor 4.2) ; => 4.0
+  (py4cl:python-eval "[i**2 for i in range(5)]"))
+
+(defun mypyimport ()
+  "imports some modules and sets a custom path"
+  (import-module "os")
+  (os:getcwd)
+  (os:listdir)
+  (import-module "sys")
+  (py4cl:python-exec "sys.path.append('/home/user/db/1/masters/code/templisp-spatial')")
+  (import-module "pprint")
+                                        ; check path contains target
+  (python-exec "pprint.pprint(sys.path)"))
+
+(defun mypystop ()
+  "Stops py4cl"
+  (py4cl:python-alive-p)
+  (py4cl:python-stop))
+
+(defun mypyrestart()
+  "restart python process to reset"
+  (pystop)
+  (pystart)
+  (pyimport))
+
+                                        ; import script on path
+
+(py4cl:import-module "pytest" :as "pytest")
+(pytest:test)
+(pytest:argument 42)
+
+(pytest:)
+
+(py4cl:initialize)
+
+;;
+;; ====================================== py4cl2
+
+
+(ql:quickload :py4cl2)
+(use-package :py4cl2)
+
+;; "Starts py4cl2 and runs a basic test"
+                                        ; may need to manually initialize
+;; (py4cl2:initialize)
+;; ;; python3, ret, ret, ret
+;; (print py4cl2:*config*)
+;; (setf (config-var pycmd) "python3") ; set
+
+;; ====================================== restart
+                                        ; stop
+(py4cl2:pystop)
+(py4cl2:python-alive-p)
+
+                                        ; test setup finds python on path
+(py4cl2:pyversion-info)    ; fails if python command is not resolved in system
+                                        ; test usage
+(py4cl2:defpymodule "math")
+(py4cl2:pyeval "math.pi")             ; 3.1415...
+(py4cl2:pyexec "print(\"hello\")")    ; => hello
+(py4cl2:defpymodule "numpy" nil :lisp-package "NP")
+(np:floor 4.2)                        ; => 4.0
+(py4cl2:pyeval "[i**2 for i in range(5)]")
+;; "imports some modules and sets a custom path"
+                                        ; import
+(defpymodule "os" nil :lisp-package "OS")
+(os:getcwd)
+(os:listdir)
+(defpymodule "sys" nil :lisp-package "SYS")
+(defpymodule "pprint" nil :lisp-package "PPRINT")
+(pyexec "sys.path.append('/home/user/db/1/masters/code/templisp-spatial')")
+(pyexec "sys.path.append('/home/user/.local/lib/python3.10/site-packages')")
+(pyexec "sys.path.append('/home/user/.guix-profile/lib/python3.10/site-packages')")
+;; check path contains target
+(pyexec "pprint.pprint(sys.path)")
+;; ====================================== restarted
+
+                                        ; test setup
+;; ensure pytest.py is on path and contains the following.
+;; files on path cannot have '-' in them or defpymodule fails, with NIL!!!
+;; If the file has a compilation error, then import will return NIL!!!
+;; def test():
+;;     print("test sucessfull")
+
+;; def argument(a):
+;;     print(a)
+
+;; def math(x):
+;;   y = x * x
+;;   return y
+
+                                        ; test import script on path
+;; (defpymodule "pytest" nil :lisp-package "PYTEST")
+;; (pytest:test)
+;; (pytest:argument :a "hello")
+;; (pytest:argument :a 42)
+;; (pytest:math :x 9)
 ;; ====================================== build
+
+(defpymodule "dynamicWorldNorm" nil :lisp-package "DWN")
+(dwn:run :src-file "/bulk-1/test/2023-07-04_index_blue_test-buffer_filled_aligned.tif"
+            :dst-file "/bulk-1/test/2023-07-04_index_blue_test-buffer_filled_aligned_normalized.tif"
+            :plot "True")
 
 (defun dynamic-world-norm ()
   "normalize a single layer geotiff"
-  ($cmd "python3 /home/user/db/1/masters/code/templisp-spatial/dynamic-world-norm.py -p filein fileout"))
-
+  )
 (dynamic-world-norm)
-
 
 ;; ====================================== scratch
 ;; ====================================== reference

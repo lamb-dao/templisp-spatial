@@ -1,16 +1,10 @@
-#!/usr/bin/env python3
-
-# import sys
-# sys.path.append('/home/user/.guix-profile/lib/python3.10/site-packages')
-
 import os
 import warnings
 import numpy as np
-import rasterio # &&&
+import rasterio
 import argparse
-# import matplotlib.pyplot as plt # &&&
-# plt.ioff() # ensure interactive matplotlib is deactivated
-
+import matplotlib.pyplot as plt
+plt.ioff() # ensure interactive matplotlib is deactivated
 
 # CALL:
 # python3 dynamic-world-norm.py [-p|--plot] /.../src.tif /.../dst.tif
@@ -21,8 +15,6 @@ import argparse
     # 2. Calculate 1st and 99th percentiles of log-transformed data
     # 3. Remap these percentiles to sigmoid curve
     # results in reshaped DN, with extremes squished but not clipped, bounded on (0, 1)
-
-#conda with numpy, rasterio,
 
 def plot_transformations(data_dict, output_path):
     """
@@ -193,6 +185,13 @@ def normalize_raster(input_path, output_path, plot):
         if not success:
             raise RuntimeError(f"Unsuccessful attempt to produce normalized raster: {output_path}")
 
+def run(srcFile, dstFile, plot):
+    """
+    call from py4cl2
+    (dynamic-world-norm:run :src-file \"f\" :dst-file \"f\" :plot \"bool\" )
+    """
+    normalize_raster(srcFile, dstFile, plot)
+
 def main():
     """Main function to handle command-line arguments and execute file operations."""
     parser = argparse.ArgumentParser(
@@ -214,8 +213,6 @@ def main():
     )
     args = parser.parse_args()
 
-    print(f"&&& early exit test call: {args.plot} {args.src_file} {args.dst_file}")
-    exit(0)
     normalize_raster(args.src_file, args.dst_file, args.plot)
     plt.close('all') #ensure matplotlib ends
 
