@@ -1,6 +1,7 @@
 import os
 import warnings
 import numpy as np
+from numpy.ma import isMaskedArray
 import rasterio
 import argparse
 import matplotlib.pyplot as plt
@@ -110,8 +111,14 @@ def normalize(data, nodata_value=None):
         data = np.ma.masked_equal(data, nodata_value)
 
     # Print diagnostics and Throw error if any negative values  remain after nodata_value is converted to mask
-    negative_values = data[(data < 0) & (~data.mask)]
-    if len(negative_values > 0):
+    if np.ma.is_masked(data):
+        negative_values = data[(data < 0) & (~data.mask)]
+    else:
+        negative_values = data[data < 0]
+        warnings.warn(f"No mask, available for {data}")
+        counts(data, "no mask found", nodata_value)
+
+    if len(negative_values) > 0:
         counts(data, "data after no value mask", nodata_value)
         raise ValueError(f"Negative values found in the data after masking: {negative_values}")
 
@@ -144,7 +151,53 @@ def normalize(data, nodata_value=None):
         'normalized': norm_data
     }
 
-def normalize_raster(input_path, output_path, plot):
+def rescale (data, nodata_value=None):
+    """
+    rescale ndvi and ndri from [-1, 1] to [0, 1]
+
+    Args:
+        data: numpy array of input values
+        nodata_value: value to be masked/ignored in calculations
+
+    Returns:
+        numpy array of rescaled values in range [0,1]
+    """
+    #create a mask if nodata_value is provided
+    if nodata_value is not None:
+        data = np.ma.masked_equal(data, nodata_value)
+
+    # We expect normalized indices to fall in the range -1,1
+    # Print diagnostics and Throw error if the index doesn't have any negative values
+    #  only count those that remain after nodata_value is converted to mask
+    if np.ma.is_masked(data):
+        negative_values = data[(data < 0) & (~data.mask)]
+    else:
+        negative_values = data[data < 0]
+        warnings.warn(f"No mask, available for {data}")
+        counts(data, "no mask found", nodata_value)
+
+    if len(negative_values) == 0 :
+        counts(data, "data after no value mask", nodata_value)
+        raise ValueError(f"No Negative values found in the normalized index data after masking: {negative_values}")
+
+    # Rescale transform
+    # (value - min) / (max - min) = position in range / range
+    # for both ndvi and ndre min=-1 and range=2=[-1,1]
+    rescale_data = (data + 1)/2
+
+    #carry mask forward
+    if nodata_value is not None:
+        rescale_data = np.ma.array(rescale_data, mask=data.mask)
+
+    # when only rescaling an index, the intermediate transformations are not neeeded, fill with original data to reuse the sigmoidal norm visualization methods
+    return {
+        'original': data,
+        'log_transformed': data,
+        'scaled': data,
+        'normalized': rescale_data
+    }
+
+def normalize_raster(input_path, output_path, plot, indexp=False):
     """
     Normalize a single band raster geotiff file using the Dynamic World normalization method.
 
@@ -152,13 +205,26 @@ def normalize_raster(input_path, output_path, plot):
         input_path: path to input raster file
         output_path: path where normalized raster will be saved
         plot: boolean if histogram are to be made, will be placed at path of output_path
+        indexp: boolean if data is a normalized index only requiring rescaling
     """
 
     with rasterio.open(input_path) as src:
         success = False
         data = src.read(1)
         nodata = src.nodata
-        data_dict = normalize(data, nodata)
+        if nodata is None:
+            nd_default = 0
+            nodata = nd_default
+            warnings.warn(f"missing nodata value setting to {nd_default}")
+            print(f"check: {input_path}")
+
+        # conditional call on indexp supplied from py4cl2 interop
+        # normalize is the default
+        if indexp:
+            data_dict = rescale(data, nodata)
+        else:
+            data_dict = normalize(data, nodata)
+
         normalized = data_dict['normalized']
 
         if plot:
@@ -179,18 +245,22 @@ def normalize_raster(input_path, output_path, plot):
         # Write the normalized data
         with rasterio.open(output_path, 'w', **profile) as dst:
             dst.write(normalized.astype(dtype_norm), 1)
-            print(f"Normalized raster: {output_path}")
+            if indexp:
+                print(f"Rescaled raster: {output_path}")
+            else:
+                print(f"Normalized raster: {output_path}")
             success = True
 
         if not success:
             raise RuntimeError(f"Unsuccessful attempt to produce normalized raster: {output_path}")
 
-def run(srcFile, dstFile, plot):
+def run(srcFile, dstFile, plot, indexp):
     """
     call from py4cl2
-    (dynamic-world-norm:run :src-file \"f\" :dst-file \"f\" :plot \"bool\" )
+    (dynamic-world-norm:run :src-file \"path/file\" :dst-file \"path/file\" :plot \"bool\ :indexp \"bool\"" )
+    This is the only access point for normalized index rescaling, the cli main method is only for DWN normalization.
     """
-    normalize_raster(srcFile, dstFile, plot)
+    normalize_raster(srcFile, dstFile, plot, indexp)
 
 def main():
     """Main function to handle command-line arguments and execute file operations."""
@@ -214,6 +284,7 @@ def main():
     args = parser.parse_args()
 
     normalize_raster(args.src_file, args.dst_file, args.plot)
+
     plt.close('all') #ensure matplotlib ends
 
 if __name__ == "__main__":
