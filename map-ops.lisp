@@ -315,174 +315,45 @@
 (py4cl2:pystop)
 (py4cl2:python-alive-p)
 
-;; /home/user/db/1/masters/code/templisp-spatial/dynamicWorldNorm.py:127: RuntimeWarning: invalid value encountered in log10
-;;   log_data = np.log10(data + 1e-10) # masked values '--' do not affect calculation
-;; Normalized raster: /bulk-1/rasters/2023-07-04_index_blue_test-buffer_filled_aligned_normed.tif
-;; /home/user/db/1/masters/code/templisp-spatial/dynamicWorldNorm.py:127: RuntimeWarning: invalid value encountered in log10
-;;   log_data = np.log10(data + 1e-10) # masked values '--' do not affect calculation
-;; Normalized raster: /bulk-1/rasters/2023-07-04_index_green_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-04_index_ndvi_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-04_index_nir_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-04_index_red_edge_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-04_index_red_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-04_index_sentera_ndre_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-11_index_blue_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-11_index_green_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-11_index_ndvi_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-11_index_nir_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-11_index_red_edge_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-11_index_red_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-11_index_sentera_ndre_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-17_index_blue_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-17_index_green_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-17_index_ndvi_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-17_index_nir_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-17_index_red_edge_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-17_index_red_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-17_index_sentera_ndre_test-buffer_filled_aligned_normed.tif
-;; /home/user/db/1/masters/code/templisp-spatial/dynamicWorldNorm.py:218: UserWarning: missing nodata value setting to 0
-;;   warnings.warn(f"missing nodata value setting to {nd_default}")
-;; check: /bulk-1/rasters/2023-07-24_index_blue_test-buffer_filled_aligned.tif
-;; /home/user/db/1/masters/code/templisp-spatial/dynamicWorldNorm.py:127: RuntimeWarning: divide by zero encountered in log10
-;;   log_data = np.log10(data + 1e-10) # masked values '--' do not affect calculation
-;; Normalized raster: /bulk-1/rasters/2023-07-24_index_blue_test-buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_green_test-buffer_filled_aligned.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-24_index_green_test-buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_ndvi_test-buffer_filled_aligned.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-24_index_ndvi_test-buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_nir_test-buffer_filled_aligned.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-24_index_nir_test-buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_red_edge_test-buffer_filled_aligned.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-24_index_red_edge_test-buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_red_test-buffer_filled_aligned.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-24_index_red_test-buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_sentera_ndre_test-buffer_filled_aligned.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-24_index_sentera_ndre_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-31_index_blue_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-31_index_green_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-31_index_ndvi_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-31_index_nir_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-31_index_red_edge_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-31_index_red_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-31_index_sentera_ndre_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-08_index_blue_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-08_index_green_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-08_index_ndvi_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-08_index_nir_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-08_index_red_edge_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-08_index_red_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-08_index_sentera_ndre_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-14_index_blue_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-14_index_green_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-14_index_ndvi_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-14_index_nir_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-14_index_red_edge_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-14_index_red_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-14_index_sentera_ndre_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-22_index_blue_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-22_index_green_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-22_index_ndvi_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-22_index_nir_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-22_index_red_edge_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-22_index_red_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-22_index_sentera_ndre_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-29_index_blue_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-29_index_green_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-29_index_ndvi_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-29_index_nir_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-29_index_red_edge_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-29_index_red_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-29_index_sentera_ndre_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-09-05_index_blue_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-09-05_index_green_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-09-05_index_ndvi_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-09-05_index_nir_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-09-05_index_red_edge_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-09-05_index_red_test-buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-09-05_index_sentera_ndre_test-buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-04_index_blue_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-04_index_green_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-04_index_ndvi_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-04_index_nir_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-04_index_red_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-04_index_red_edge_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-04_index_sentera_ndre_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-11_index_blue_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-11_index_green_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-11_index_ndvi_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-11_index_nir_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-11_index_red_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-11_index_red_edge_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-11_index_sentera_ndre_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-17_index_blue_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-17_index_green_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-17_index_ndvi_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-17_index_nir_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-17_index_red_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-17_index_red_edge_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-17_index_sentera_ndre_buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_blue_buffer_filled_aligned.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-24_index_blue_buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_green_buffer_filled_aligned.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-24_index_green_buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_ndvi_buffer_filled_aligned.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-24_index_ndvi_buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_nir_buffer_filled_aligned.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-24_index_nir_buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_red_buffer_filled_aligned.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-24_index_red_buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_red_edge_buffer_filled_aligned.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-24_index_red_edge_buffer_filled_aligned_normed.tif
-;; check: /bulk-1/rasters/2023-07-24_index_sentera_ndre_buffer_filled_aligned.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-24_index_sentera_ndre_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-31_index_blue_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-31_index_green_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-31_index_ndvi_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-31_index_nir_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-31_index_red_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-07-31_index_red_edge_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-07-31_index_sentera_ndre_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-08_index_blue_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-08_index_green_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-08_index_ndvi_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-08_index_nir_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-08_index_red_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-08_index_red_edge_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-08_index_sentera_ndre_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-14_index_blue_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-14_index_green_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-14_index_ndvi_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-14_index_nir_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-14_index_red_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-14_index_red_edge_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-14_index_sentera_ndre_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-22_index_blue_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-22_index_green_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-22_index_ndvi_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-22_index_nir_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-22_index_red_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-22_index_red_edge_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-22_index_sentera_ndre_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-29_index_blue_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-29_index_green_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-29_index_ndvi_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-29_index_nir_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-29_index_red_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-08-29_index_red_edge_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-08-29_index_sentera_ndre_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-09-05_index_blue_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-09-05_index_green_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-09-05_index_ndvi_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-09-05_index_nir_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-09-05_index_red_buffer_filled_aligned_normed.tif
-;; Normalized raster: /bulk-1/rasters/2023-09-05_index_red_edge_buffer_filled_aligned_normed.tif
-;; Rescaled raster: /bulk-1/rasters/2023-09-05_index_sentera_ndre_buffer_filled_aligned_normed.tif
+;; ====================================== fill pixels with no data
+
+(defun gdal_fillnodata (srs-tif dst-tif)
+  "heal nodata pixels in srs-tif, saving as dst-tif"
+  ($cmd (format nil "gdal_fillnodata.py -md 100 -si 11 -of GTiff ~A ~A" srs-tif dst-tif)))
+
+(defun fillnodata (srs-tif)
+  "fill pixels in srs-tif, create a new name, appending _filled"
+  (let* ((postfix "_filled")
+         (new-name (make-pathname :defaults srs-tif
+                                  ::name (concatenate 'string
+                                                      (pathname-name srs-tif)
+                                                      postfix))))
+    (format t "Fillnodata: ~A" srs-tif)
+    (gdal_fillnodata srs-tif new-name)))
+
+(defun tifs-filled ()
+  "gather all clipped tiffs and fills nodata pixels, tests for 70+70 "
+  (let* ((test-tifs (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                              :predicates (list (extension= "tif")
+                                                                (name~ "_test-buffer")
+                                                                (name~ "_normed")
+                                                                (complement (name~ "_filled.tif"))))))
+         (full-tifs (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                              :predicates (list (extension= "tif")
+                                                                (name~ "_buffer")
+                                                                (name~ "_normed")
+                                                                (complement (name~ "_filled.tif"))))))
+         (tifs (append test-tifs full-tifs)))
+    (assert (= 140 (length tifs)) () "Expected 140, found ~A" (length tifs))
+    (mapcar #'fillnodata tifs)))
+
+;;(tifs-filled)
 
 ;;#|;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv end of compiled code
 (error "Beyond here be monsters") ;; ensure #| is active to exclude construction from compilation
 
 ;; ======================================build
-
+;; gaussian pyramid
 
 ;; ====================================== scratch
 
@@ -491,81 +362,5 @@
 
 ;;;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv later
 
-
-;; gaussian pyramid
 ;; clip to AOI
 ;; export to gpkg
-
-
-  (ql:quickload :py4cl2)
-  (use-package :py4cl2)
-
-                                          ; first time manually initialize
-  ;; (py4cl2:initialize)
-  ;; ;; python3, ret, ret, ret
-  ;; (print py4cl2:*config*)
-  ;; (setf (config-var pycmd) "python3") ; set one field
-
-                                          ; test if pycmd finds python on path
-  (py4cl2:pyversion-info)    ; fails if python command is not resolved
-
-                                          ; test usage
-  (py4cl2:pyexec "print(\"hello\")")    ; => hello
-  (py4cl2:defpymodule "math")
-  (py4cl2:pyeval "math.pi")             ; 3.1415...
-  (py4cl2:defpymodule "numpy" nil :lisp-package "NP")
-  (np:floor 4.2)                        ; => 4.0
-  (py4cl2:pyeval "[i**2 for i in range(5)]")
-
-                                          ; import and environment
-  (defpymodule "os" nil :lisp-package "OS")
-  (defpymodule "sys" nil :lisp-package "SYS")
-  (defpymodule "pprint" nil :lisp-package "PPRINT")
-  (pyexec "sys.path.append('/home/user/code/dircontainingscript')")
-  (pyexec "sys.path.append('/home/user/.local/lib/python3.10/site-packages')")
-  (pyexec "sys.path.append('/home/user/.guix-profile/lib/python3.10/site-packages')")
-  ;; check python path contains target and path to imported modules
-  (pyexec "pprint.pprint(sys.path)")
-  (os:getcwd)
-  (os:listdir)
-
-                                          ; test setup
-  ;; NOTE: files on path cannot have '-' in them or defpymodule fails, with NIL!!!
-  ;; NOTE: If the file has a compilation error, then import will return NIL!!!
-  ;; NOTE: unresolved module import is one such silent failure mode.
-  ;; create pytest.py on python path which contains the following.
-  ;; ======================================
-  ;; def test():
-  ;;     print("test sucessfull")
-
-  ;; def argument(a):
-  ;;     print(a)
-
-  ;; def math(x):
-  ;;   y = x * x
-  ;;   return y
-
-  ;; def cond(b):
-  ;;   if(b):
-  ;;     print("verily")
-  ;;   else:
-  ;;     print("nay")
-
-
-
-  ;; ======================================
-
-                                          ; test import script on path
-  (defpymodule "pytest" nil :lisp-package "PYTEST")
-  (pytest:test)
-  (pytest:argument :a "hello")
-  (pytest:argument :a 42)
-  (pytest:math :x 9)
-  (pytest:cond :b nil)
-  (pytest:cond :b t)
-
-  ;; must stop and restart to re import with changes
-
-                                          ; stop
-  (py4cl2:pystop)
-  (py4cl2:python-alive-p)
