@@ -15,15 +15,21 @@
 (in-package :map-ops) ; Also enter this in the REPL!
 
 
+;;;; =================================== &&& gather shared functions
+
+(defun F-to-P (F)
+  "Convert one #F filename to #P pathname"
+  (probe-file (path F)))
+
+(defun gdalwarp-clip (gpkg-shape srs-tif dst-tif)
+  "clip srs-tif to the shape defined in gpkg-shape, saving as dst-tif"
+  ($cmd (format nil "gdalwarp -of GTiff -cutline ~A -crop_to_cutline ~A ~A" gpkg-shape srs-tif dst-tif)))
+
 ;;;; =================================== merge east-west processing to single standard flight
 
 (defparameter *east-dir* #P"/bulk-1/2023/Pix4D/X2023-07-24_UNMERGED/2023-07-24_eastside/4_index/indices/")
 (defparameter *west-dir* #P"/bulk-1/2023/Pix4D/X2023-07-24_UNMERGED/2023-07-24_re-run_westside/4_index/indices/")
 (defparameter *merge-dir* #P"/bulk-1/2023/Pix4D/X2023-07-24_UNMERGED/2023-07-24_merges/")
-
-(defun F-to-P (F)
-  "Convert one #F filename to #P pathname"
-  (probe-file (path F)))
 
 (defun east-tifs ()
   "returns a list of #P, being the .tif files below *east-dir*"
@@ -148,10 +154,6 @@
 ;; (collect)
 
 ;; ====================================== clip to AOI buffered
-
-(defun gdalwarp-clip (gpkg-shape srs-tif dst-tif)
-  "clip srs-tif to the shape defined in gpkg-shape, saving as dst-tif"
-  ($cmd (format nil "gdalwarp -of GTiff -cutline ~A -crop_to_cutline ~A ~A" gpkg-shape srs-tif dst-tif)))
 
 (defun clip-to-buffer (srs-tif)
   "Apply AOI buffered shape, to srs-tif and make a new name appending _buffer"
@@ -456,6 +458,48 @@
 
 ;;(tifs-renamed)
 
+;; ====================================== clip to AOI
+(defun clip-to-aoi (srs-tif)
+  "Apply AOI shape, to srs-tif and make a new name appending _AOI"
+  (let* ((shape #P"/home/user/qgis/AOI.gpkg")
+         (postfix "_AOI")
+         (new-name (make-pathname :defaults srs-tif
+                                  :name (concatenate 'string
+                                                     (pathname-name srs-tif)
+                                                     postfix))))
+    (gdalwarp-clip shape srs-tif new-name)))
+
+(defun tifs-clipped-to-aoi ()
+  "Gathers all gaussian processed .tif and clips to aoi, tests for 630"
+  (let ((tifs (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                        :predicates (list (extension= "tif")
+                                                          (name~ "_buffer_")
+                                                          (name~ "_sigma-"))))))
+    (assert (= (* 70 9) (length tifs)) () "Expected 630 found ~A" (length tifs))
+    (mapcar #'clip-to-aoi tifs)))
+;;(tifs-clipped-to-aoi)
+
+;; ====================================== clip to test
+(defun clip-to-test (srs-tif)
+  "Apply AOI shape, to srs-tif and make a new name appending _test-AOI"
+  (let* ((shape #P"/home/user/qgis/test-AOI.gpkg")
+         (postfix "_test-AOI")
+         (new-name (make-pathname :defaults srs-tif
+                                  :name (concatenate 'string
+                                                     (pathname-name srs-tif)
+                                                     postfix))))
+    (gdalwarp-clip shape srs-tif new-name)))
+
+(defun tifs-clipped-to-testaoi ()
+  "Gathers all gaussian processed test .tif and clips to test aoi, tests for 630"
+  (let ((tifs (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                        :predicates (list (extension= "tif")
+                                                          (name~ "_test-buffer_")
+                                                          (name~ "_sigma-"))))))
+    (assert (= (* 70 9) (length tifs)) () "Expected 630 found ~A" (length tifs))
+    (mapcar #'clip-to-test tifs)))
+;;(tifs-clipped-to-testaoi)
+
 ;;#|;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv end of compiled code
 (error "Beyond here be monsters") ;; ensure #| is active to exclude construction from compilation
 
@@ -465,7 +509,5 @@
 
 ;;;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv later
 
-;; &&& move vis to products
-;; clip to AOI
 ;; export to gpkg
 ;; &&& make samples in products
