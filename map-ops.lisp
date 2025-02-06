@@ -55,7 +55,6 @@
     ;; all are type #P
     (assert (every #'pathnamep (append o w e)))
     ;; all have same indices
-    ;;&&& not working
     (assert (and (null (set-difference (mapcar #'index-only o)
                                        (mapcar #'index-only w) :test #'string=))
                  (null (set-difference (mapcar #'index-only o)
@@ -315,6 +314,20 @@
 (py4cl2:pystop)
 (py4cl2:python-alive-p)
 
+(defun move-pngs ()
+  "move normalization process visualizations to products, ensure 280"
+  (let ((pngs (mapcar #'F-TO-P (finder* :root "/bulk-1/rasters/"
+                       :predicates '(extension= ".png")))))
+    (flet ((move-one-png (src)
+             (let ((dst (make-pathname :defaults src
+                                       :directory (pathname-directory "/home/user/db/1/masters/products/"))))
+               (rename-file src dst))))
+      (assert (= 280 (length pngs)))
+      (ensure-directories-exist "/home/user/db/1/masters/products/")
+      (mapcar #'move-one-png pngs))))
+
+;;(move-pngs)
+
 ;; ====================================== fill pixels with no data
 
 (defun gdal_fillnodata (srs-tif dst-tif)
@@ -325,7 +338,7 @@
   "fill pixels in srs-tif, create a new name, appending _filled"
   (let* ((postfix "_filled")
          (new-name (make-pathname :defaults srs-tif
-                                  ::name (concatenate 'string
+                                  :name (concatenate 'string
                                                       (pathname-name srs-tif)
                                                       postfix))))
     (format t "Fillnodata: ~A" srs-tif)
@@ -349,18 +362,110 @@
 
 ;;(tifs-filled)
 
+;; ====================================== gaussian scale space
+
+;; ensure the shell from which emacs is invoked has sourced otb
+;; $ source ~/otb/otbenv.profile
+;; ($cmd "otbcli_Smoothing -help") ; test otbcli on path and accessible by interop, this will return the help message and error code
+
+(defun make-room ()
+  "delete interim files to make room "
+  (let ((b (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                             :predicates (list (extension= "tif")
+                                                                (name~ "buffer.tif")))))
+        (bf (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                        :predicates (list (extension= "tif")
+                                                          (name~ "buffer_filled.tif")))))
+        (bfa (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                        :predicates (list (extension= "tif")
+                                                          (name~ "buffer_filled_aligned.tif")))))
+        (bfan (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                        :predicates (list (extension= "tif")
+                                                          (name~ "buffer_filled_aligned_normed.tif"))))))
+    (assert (= (* 140 4) (length (append b bf bfa bfan))))
+    (mapcar #'delete-file (append b bf bfa bfan))))
+
+;;(make-room)
+
+(defun otbcli_Smoothing (srs-tif dst-tif sigma)
+  "apply gaussian blur at sigma pixels to srs-tif saving as dst-tif"
+  ($cmd (format nil "otbcli_Smoothing -in ~A -out ~A -type gaussian -type.gaussian.stdev ~A -type.gaussian.maxwidth 137"
+                srs-tif
+                dst-tif
+                sigma)))
+
+(defun smooth-tif (srs-tif sigma)
+  "apply sigma gaussian to srs-tif, creating a new name"
+  (let* ((postfix (concatenate 'string "_sigma-" (write-to-string sigma)))
+         (new-name (make-pathname :defaults srs-tif
+                                  :name (concatenate 'string
+                                                     (pathname-name srs-tif)
+                                                     postfix))))
+    (otbcli_Smoothing srs-tif new-name sigma)))
+
+(defun scale-space (srs-tif)
+  "create a gaussian scale space from srs tif"
+  (let ((sigma-values '(2 2.828 4 5.656 8 11.314 16 22.627)))
+    (format t "~%Apply Gaussians: ~A~%" srs-tif)
+    (dolist (sigma sigma-values)
+      (format t "~%Sigma: ~A~%"sigma)
+      (smooth-tif srs-tif sigma))))
+
+(defun tifs-blurred ()
+  "gather all normed and filled tiffs and creates a gaussian scale space for each, tests for 70+70 "
+  (let* ((test-tifs (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                              :predicates (list (extension= "tif")
+                                                                (name~ "_test-buffer")
+                                                                (name~ "_normed_filled.tif")
+                                                                (complement (name~ "_sigma-"))))))
+         (full-tifs (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                              :predicates (list (extension= "tif")
+                                                                (name~ "_buffer")
+                                                                (name~ "_normed_filled.tif")
+                                                                (complement (name~ "_sigma-"))))))
+         (tifs (append test-tifs full-tifs)))
+    (assert (= 140 (length tifs)) () "Expected 140, found ~A" (length tifs))
+    (mapcar #'scale-space tifs)))
+
+;;(tifs-blurred)
+
+(defun tifs-renamed ()
+  "gather all normed and filled tiffs  which were sources for the gaussian space and rename appending _sigma-0, tests for 70+70 "
+  (let* ((test-tifs (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                              :predicates (list (extension= "tif")
+                                                                (name~ "_test-buffer")
+                                                                (name~ "_normed_filled.tif")
+                                                                (complement (name~ "_sigma-"))))))
+         (full-tifs (mapcar #'F-to-P (finder* :root "/bulk-1/rasters/"
+                                              :predicates (list (extension= "tif")
+                                                                (name~ "_buffer")
+                                                                (name~ "_normed_filled.tif")
+                                                                (complement (name~ "_sigma-"))))))
+         (tifs (append test-tifs full-tifs)))
+    (flet ((rename (srs-tif)
+             (let* ((postfix "_sigma-0")
+                    (new-name (make-pathname :defaults srs-tif
+                                             :name (concatenate 'string
+                                                                (pathname-name srs-tif)
+                                                                postfix))))
+               (rename-file srs-tif new-name)
+
+               )))
+      (assert (= 140 (length tifs)) () "Expected 140, found ~A" (length tifs))
+      (mapcar #'rename tifs))))
+
+;;(tifs-renamed)
+
 ;;#|;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv end of compiled code
 (error "Beyond here be monsters") ;; ensure #| is active to exclude construction from compilation
 
-;; ======================================build
-;; gaussian pyramid
-
+;; ====================================== build
 ;; ====================================== scratch
-
-
 ;; ====================================== reference
 
 ;;;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv later
 
+;; &&& move vis to products
 ;; clip to AOI
 ;; export to gpkg
+;; &&& make samples in products
