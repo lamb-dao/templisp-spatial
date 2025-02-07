@@ -8,6 +8,7 @@
    :click
    :cmd
    :py4cl2
+   :iterate
    :file-finder)
   (:shadowing-import-from :cmd :current-directory))
 
@@ -500,14 +501,88 @@
     (mapcar #'clip-to-test tifs)))
 ;;(tifs-clipped-to-testaoi)
 
+;; ====================================== create composite images
+(defparameter *rgb-tifs*
+          (mapcar #'F-TO-P (finder* :root "/bulk-1/rasters/"
+                                    :predicates (list (extension= "tif")
+                                                      (complement (name~ "_ndre_"))
+                                                      (complement (name~ "_red_edge_"))
+                                                      (complement (name~ "_nir_"))
+                                                      (complement (name~ "_ndvi_"))
+                                                      (name~ "_AOI")
+                                                      (name~ "_sigma-0")))))
+(length *rgb-tifs*) ; 30, 10dates*rgb
+
+(defun unique-dates (rgb-tifs)
+  "extracts a list of unique dates from a list of paths which contain dates.
+Expected pathname format: 2023-09-05_index_green_buffer_filled_aligned_normed_filled_sigma-0_AOI"
+                                        ; path to date
+  (labels ((str-range (str from to)
+             (subseq str (search from str) (search to str)))
+                                        ; list of strings to dates
+           (dates (tifs from to)
+             (mapcar #'(lambda (tif) (str-range tif from to)) tifs))
+                                        ; list of paths to strings
+           (unpathify (tifs)
+             (mapcar #'pathname-name tifs)))
+                                        ; list of paths to unique dates
+    (remove-duplicates (dates (unpathify rgb-tifs) "20" "_") :test #'equal)))
+
+(defun rgb-sets (rgb-tifs)
+  "list of paths returns sets of r g b tifs matching each unique date "
+  (labels ((matched-date (strs date)
+             (let* ((dated (matched strs date))
+                    (r (matched dated "_red" ))
+                    (g (matched dated "_green" ))
+                    (b (matched dated "_blue" )))
+               `((r . ,r) (g . ,g) (b . ,b))))
+           (matched (strs match)
+             (remove-if-not #'(lambda (str) (str:containsp match str)) strs))
+           (p-str (tifs)
+             (mapcar #'namestring tifs)))
+    (let ((dates (unique-dates rgb-tifs))
+          (strs (p-str rgb-tifs)))
+      (mapcar #'(lambda (date) (matched-date strs date)) dates))))
+
+
+(defun gdal_merge.py (out-file red-file green-file blue-file)
+  " Usage: gdal_merge.py [-o out_filename] [-of out_format] [-co NAME=VALUE]*
+                     [-ps pixelsize_x pixelsize_y] [-tap] [-separate] [-q] [-v] [-pct]
+                     [-ul_lr ulx uly lrx lry] [-init "value [value...]"]
+                     [-n nodata_value] [-a_nodata output_nodata_value]
+                     [-ot datatype] [-createonly] input_files
+                     [--help-general]"
+  ($cmd (format nil "gdal_merge.py -o ~A -separate -of GTiff ~A ~A ~A" out-file red-file green-file blue-file))
+  (format t "Created: ~A~%" out-file))
+
+(defun make-composite (red-file green-file blue-file)
+  "create new name and call merge"
+  (let ((new-name (make-pathname :defaults red-file
+                                 :name (concatenate 'string
+                                                    (subseq red-file (search "20" red-file) (search "_" red-file))
+                                                    "_composite")))) ; date_composite.tif
+    (gdal_merge.py new-name red-file green-file blue-file)))
+
+;; list of rgb sets to gdal composite calls
+(defun composite-tifs ()
+  "makes composite tifs for all dates"
+  (dolist (rgb-set (rgb-sets *rgb-tifs*))
+    (let ((r (cadr (first rgb-set)))
+          (g (cadr (second rgb-set)))
+          (b (cadr (third rgb-set))))
+      (make-composite r g b))))
+
+;;(composite-tifs)
+
 ;;#|;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv end of compiled code
 (error "Beyond here be monsters") ;; ensure #| is active to exclude construction from compilation
 
 ;; ====================================== build
 ;; ====================================== scratch
+
 ;; ====================================== reference
 
 ;;;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv later
 
-;; export to gpkg
 ;; &&& make samples in products
+;; &&& rename final files to bulk2
