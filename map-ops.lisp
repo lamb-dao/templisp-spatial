@@ -16,7 +16,7 @@
 (in-package :map-ops) ; Also enter this in the REPL!
 
 
-;;;; =================================== &&& gather shared functions
+;;;; =================================== gather shared functions
 
 (defun F-to-P (F)
   "Convert one #F filename to #P pathname"
@@ -574,15 +574,27 @@ Expected pathname format: 2023-09-05_index_green_buffer_filled_aligned_normed_fi
 
 ;;(composite-tifs)
 
-;;#|;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv end of compiled code
-(error "Beyond here be monsters") ;; ensure #| is active to exclude construction from compilation
+;; ====================================== rename final files to bulk2
+(defparameter *move-tifs* (mapcar #'F-TO-P (finder* :root "/bulk-1/rasters/"
+                                   :predicates (list
+                                                (extension= "tif")
+                                                (name~ "_buffer_")
+                                                (name~ "_AOI")
+                                                (name~ "_sigma-")))))
 
-;; ====================================== build
-;; ====================================== scratch
+(length *move-tifs*) ; => 630, 9 sigmas, 10 dates, 7 channels
 
-;; ====================================== reference
+(defun rename-files (move-tifs)
+  "shorten fully processed file names and move to bulk2"
+  (dolist (file move-tifs)
+    (let* ((old-name (namestring file))
+           (new-name (ppcre:regex-replace-all
+                      "/bulk-1/rasters/(\\d{4}-\\d{2}-\\d{2})_index_(.+?)_buffer_filled_aligned_normed_filled_(sigma-[\\d.]+)_AOI\\.tif$"
+                      old-name
+                      "date_\\1_index_\\2_\\3")))
+      ;;(format t "~A~%~A~%~%" old-name new-name)
+      (alexandria:copy-file old-name (make-pathname :directory "bulk-2/rasters"
+                                                    :name new-name
+                                                    :type "tif")))))
 
-;;;; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv later
-
-;; &&& make samples in products
-;; &&& rename final files to bulk2
+;;(rename-files *move-tifs*)
