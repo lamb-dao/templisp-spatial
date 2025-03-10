@@ -33,6 +33,14 @@ Execute all stages of spatial data preparation for the initial 70 geotiffs
 - export to geopackage standardized format
 
 ** table-ops.lisp
+Execute all stages of observational data preparation, cleaning, validation and export
 
+- calculate mean height  and weight of guard row samples
+- merge samples 1001-1010 and 1-1000 on sample column
+- calculate adjustment values from gross measurements
+- check distributions for outliers
 
-** &&& segmentation notebook
+** segmentation notebook
+Proposed field and yeild plot segmentation method using geo-sam model
+
+Not used at small plot scale
