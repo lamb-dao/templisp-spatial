@@ -599,4 +599,30 @@ Expected pathname format: 2023-09-05_index_green_buffer_filled_aligned_normed_fi
 
 ;;(rename-files *move-tifs*)
 
+;; ====================================== rename final test files to bulk2
+(defparameter *move-test-tifs* (mapcar #'F-TO-P (finder* :root "/bulk-1/rasters/"
+                                   :predicates (list
+                                                (extension= "tif")
+                                                (name~ "_test-buffer_")
+                                                (name~ "_test-AOI")
+                                                (name~ "_sigma-")))))
+
+(length *move-test-tifs*) ; => 630, 9 sigmas, 10 dates, 7 channels
+
+(defun rename-test-files (move-test-tifs)
+  "shorten fully processed file names and move to bulk2"
+  (dolist (file move-test-tifs)
+    (let* ((old-name (namestring file))
+           (new-name (ppcre:regex-replace-all
+                      "/bulk-1/rasters/(\\d{4}-\\d{2}-\\d{2})_index_(.+?)_test-buffer_filled_aligned_normed_filled_(sigma-[\\d.]+)_test-AOI\\.tif$"
+                      old-name
+                      "date_\\1_index_\\2_\\3")))
+      ;;(format t "~A~%~A~%~%" old-name new-name)
+      (alexandria:copy-file old-name (make-pathname :directory "bulk-2/test-rasters"
+                                                     :name new-name
+                                                     :type "tif"))
+      )))
+
+(rename-test-files *move-test-tifs*)
+
 ;; ====================================== fin
